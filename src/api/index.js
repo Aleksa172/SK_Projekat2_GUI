@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../store'
 
 axios.interceptors.request.use(config => {
     handleRequestInterceptor(config);
@@ -7,8 +8,12 @@ axios.interceptors.request.use(config => {
 
 function handleRequestInterceptor(config) {
     try {
-        let jwt = sessionStorage.getItem("jwt");
-        console.log('jwt', jwt);
+        // var currentJwt = store.getters.currentJwt();
+        var currentJwt = sessionStorage.getItem('jwt');
+        console.log("Current JWT:", currentJwt)
+        if(currentJwt) {
+            config.headers['Authorization'] = currentJwt;
+        }
     }
     catch(e) {
         console.error("INTERCEPTOR ERROR: "+e);
@@ -32,8 +37,13 @@ export default {
       }
     }),
 
-    sviLetovi: (params) => axios({
-        url: `${SERVIS2_URL}/letovi`
-    })
+    sviLetovi: (params) => {
+        return axios({
+            url: `${SERVIS2_URL}/letovi`,
+            params
+        })
+            
+    }
+    
 
 }
