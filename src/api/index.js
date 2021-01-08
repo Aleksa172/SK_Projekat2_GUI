@@ -30,6 +30,10 @@ export default {
           email: params.email,
           password: params.password
       }
-    });
+    }),
+
+    sviLetovi: (params) => axios({
+        url: `${SERVIS2_URL}/letovi`
+    })
 
 }
