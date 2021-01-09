@@ -48,20 +48,119 @@
             </b-table-simple>
         </div>
 
-        <b-table-lite :items="letovi"></b-table-lite>
+        <b-table-simple>
+            <b-tr>
+                <b-th>
+                    Id
+                </b-th>
 
-        <button @click="stranaNazad">
-            nazad
-        </button>
+                <b-th>
+                    Avion
+                </b-th>
+            
+                <b-th>
+                    Pocetna destinacija
+                </b-th>
+            
+                <b-th>
+                    Krajnja destinacija
+                </b-th>
+            
+                <b-th>
+                    Trajanje leta (min)
+                </b-th>
+            
+                <b-th>
+                    Cena (EUR)
+                </b-th>
+            
+                <b-th>
+                    STATUS
+                </b-th>
+                <b-th>
+                    Radnja
+                </b-th>
+            </b-tr>
 
-        <button @click="stranaNapred">
-            napred
-        </button>
+            <b-tr v-for="red in letovi" :key="red.id">
+                <b-td>
+                    {{ red.id }}
+                </b-td>
+                <b-td>
+                    {{ red.avion }}
+                </b-td>
+                <b-td>
+                    {{ red.pocetnaDestinacija }}
+                </b-td>
+                <b-td>
+                    {{ red.krajnjaDestinacija }}
+                </b-td>
+                <b-td>
+                    {{ red.trajanjeLeta }}
+                </b-td>
+                <b-td>
+                    {{ red.cena }}
+                </b-td>
+                <b-td>
+                    {{ red.status }}
+                </b-td>
+                <b-td>
+                    <b-button v-if="red.status != 'CANCELLED'" @click="obrisiLet(red.id)" variant="danger">Ukloni let</b-button>
+                    <b-button v-else disabled @click="obrisiLet(red.id)" variant="danger">Ukloni let</b-button>
+                </b-td>
+            </b-tr>
+        </b-table-simple>
+        <div>
+            <button @click="stranaNazad">
+                nazad
+            </button>
+
+            <button @click="stranaNapred">
+                napred
+            </button>
+        </div>
+        <div class="row">
+            <b-btn class="btn" variant="primary" @click="otvorenoDodavanjeNovogLeta=!otvorenoDodavanjeNovogLeta">Novi let...</b-btn>
+        </div>
+        <div v-if="otvorenoDodavanjeNovogLeta" class="container">
+            <b-table-simple>
+                <b-tr>
+                    <b-td>
+                        <b-form-input v-model="noviLet.pocetnaDestinacija" placeholder="Pocetna destinacija..."></b-form-input>
+                    </b-td>
+                    <b-td>
+                        <b-form-input v-model="noviLet.krajnjaDestinacija" placeholder="Krajnja destinacija..."></b-form-input>
+                    </b-td>
+                </b-tr>
+                <b-tr>
+                    <b-td>
+                        <b-form-input v-model="noviLet.trajanje" placeholder="Trajanje ..."></b-form-input>
+                    </b-td>
+                    <b-td>
+                        <b-form-input v-model="noviLet.cena" placeholder="Cena ..."></b-form-input>
+                    </b-td>
+                </b-tr>
+                <b-tr>
+                    <b-td>
+                        <b-form-select v-model="noviLet.avionId" :options="avioni"></b-form-select>
+                    </b-td>
+                </b-tr>
+                <b-tr>
+                    <b-td>
+                        <b-btn class="btn" variant="danger" @click="otvorenoDodavanjeNovogLeta=!otvorenoDodavanjeNovogLeta">Cancel</b-btn>
+                    </b-td>
+                    <b-td>
+                        <b-btn class="btn" variant="success" @click="otvorenoDodavanjeNovogLeta=!otvorenoDodavanjeNovogLeta">Dodaj let</b-btn>
+                    </b-td>
+                </b-tr>
+            </b-table-simple>
+        </div>
+
     </b-container>
 </template>
 
 <script>
-import api from '../api' 
+import api from '../../api' 
 
 export default {
     data: function(){
@@ -81,6 +180,14 @@ export default {
             paginacija: {
                 from: 0,
                 count: 10 // count se realno nece menjati
+            },
+            otvorenoDodavanjeNovogLeta: false,
+            noviLet: {
+                pocetnaDestinacija: "",
+                krajnjaDestinacija: "",
+                trajanje: "",
+                cena: "",
+                avionId: null
             }
         }
     },
@@ -159,6 +266,14 @@ export default {
             }
             
             return parametri;
+        },
+        obrisiLet(letId) {
+            api.obrisiLet({
+                letId
+            }).then(() => {
+                // Najverovatnije ce uvek sve biti okej
+                this.filtriraj();
+            })
         },
         stranaNapred() {
             if(this.letovi.length == 0){

@@ -1,4 +1,4 @@
-var TEMP_JWT = "Basic eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXJhQHAuY29tIiwiZXhwIjoxNjEwMjExMTcxfQ.ziX4-y-IGClOJhi9fpUvhCanyEts-adVFAOHdRW8Wg_1sbI6MiAyQMQhVjlk1gVoREkTmK1jtKsHsLfpwa1rzA"
+var TEMP_JWT = "Basic eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXJhQHAuY29tIiwiZXhwIjoxNjEwMjk3ODMzfQ.HjFRIufq2svOZ9q0smJ0cydfjQG4FYtnG9ulOE3LVIp_mKPqF_eHqUdgcQqxYOMkzC9rTaPhUOu4gmEB-YQmbw"
 
 var TOKEN_PREFIX = "Basic "
 

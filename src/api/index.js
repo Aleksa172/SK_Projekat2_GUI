@@ -42,7 +42,20 @@ export default {
             url: `${SERVIS2_URL}/letovi`,
             params
         })
-            
+    },
+
+    sviAvioni: (params) => {
+        return axios({
+            url: `${SERVIS2_URL}/avioni`,
+            params
+        })
+    },
+
+    obrisiLet: (params) => {
+        return axios({
+            url: `${SERVIS2_URL}/ukloni-let/${params.letId}`,
+            method: 'POST'
+        })
     }
     
 
