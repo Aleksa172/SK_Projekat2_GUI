@@ -56,6 +56,42 @@ export default {
             url: `${SERVIS2_URL}/ukloni-let/${params.letId}`,
             method: 'POST'
         })
+    },
+
+    obrisiAvion: (params) => {
+        return axios({
+            url: `${SERVIS2_URL}/ukloni-avion/${params.avionId}`,
+            method: 'POST'
+        })
+    },
+
+    dodajAvion: (params) => {
+        // Da bi se prosledilo springu na nacin na koji moze da dekoduje
+        var urlEnkodovanData = `naziv=${params.naziv}&kapacitet=${params.kapacitet}`;
+        
+        return axios({
+            url: `${SERVIS2_URL}/napravi-avion`,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: urlEnkodovanData
+        })
+    },
+
+    dodajLet: (params) => {
+        // Da bi se prosledilo springu na nacin na koji moze da dekoduje
+        var urlEnkodovanData = `pocetnaDestinacija=${params.pocetnaDestinacija}&krajnjaDestinacija=${params.krajnjaDestinacija}&cena=${params.cena}&trajanje=${params.trajanje}&avion_id=${params.avionId}`;
+
+
+        return axios({
+            url: `${SERVIS2_URL}/napravi-let`,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: urlEnkodovanData
+        })
     }
     
 

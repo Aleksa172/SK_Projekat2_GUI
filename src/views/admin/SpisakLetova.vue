@@ -126,23 +126,23 @@
             <b-table-simple>
                 <b-tr>
                     <b-td>
-                        <b-form-input v-model="noviLet.pocetnaDestinacija" placeholder="Pocetna destinacija..."></b-form-input>
+                        <b-form-input v-model="noviLet.pocetnaDestinacija.value" placeholder="Pocetna destinacija..." :class="{'is-invalid': noviLet.pocetnaDestinacija.isInvalid}"></b-form-input>
                     </b-td>
                     <b-td>
-                        <b-form-input v-model="noviLet.krajnjaDestinacija" placeholder="Krajnja destinacija..."></b-form-input>
-                    </b-td>
-                </b-tr>
-                <b-tr>
-                    <b-td>
-                        <b-form-input v-model="noviLet.trajanje" placeholder="Trajanje ..."></b-form-input>
-                    </b-td>
-                    <b-td>
-                        <b-form-input v-model="noviLet.cena" placeholder="Cena ..."></b-form-input>
+                        <b-form-input v-model="noviLet.krajnjaDestinacija.value" placeholder="Krajnja destinacija..." :class="{'is-invalid': noviLet.krajnjaDestinacija.isInvalid}"></b-form-input>
                     </b-td>
                 </b-tr>
                 <b-tr>
                     <b-td>
-                        <b-form-select v-model="noviLet.avionId" :options="avioni"></b-form-select>
+                        <b-form-input v-model="noviLet.trajanje.value" placeholder="Trajanje ..." :class="{'is-invalid': noviLet.trajanje.isInvalid}"></b-form-input>
+                    </b-td>
+                    <b-td>
+                        <b-form-input v-model="noviLet.cena.value" placeholder="Cena ..." :class="{'is-invalid': noviLet.cena.isInvalid}"></b-form-input>
+                    </b-td>
+                </b-tr>
+                <b-tr>
+                    <b-td>
+                        <b-form-select v-model="noviLet.avionId.value" :options="avioni" :class="{'is-invalid': noviLet.avionId.isInvalid}"></b-form-select>
                     </b-td>
                 </b-tr>
                 <b-tr>
@@ -150,7 +150,7 @@
                         <b-btn class="btn" variant="danger" @click="otvorenoDodavanjeNovogLeta=!otvorenoDodavanjeNovogLeta">Cancel</b-btn>
                     </b-td>
                     <b-td>
-                        <b-btn class="btn" variant="success" @click="otvorenoDodavanjeNovogLeta=!otvorenoDodavanjeNovogLeta">Dodaj let</b-btn>
+                        <b-btn class="btn" variant="success" @click="dodajLet()">Dodaj let</b-btn>
                     </b-td>
                 </b-tr>
             </b-table-simple>
@@ -183,11 +183,26 @@ export default {
             },
             otvorenoDodavanjeNovogLeta: false,
             noviLet: {
-                pocetnaDestinacija: "",
-                krajnjaDestinacija: "",
-                trajanje: "",
-                cena: "",
-                avionId: null
+                pocetnaDestinacija: {
+                    value: "",
+                    isInvalid: false
+                },
+                krajnjaDestinacija: {
+                    value: "",
+                    isInvalid: false
+                },
+                trajanje: {
+                    value: "",
+                    isInvalid: false
+                },
+                cena: {
+                    value: "",
+                    isInvalid: false
+                },
+                avionId: {
+                    value: null,
+                    isInvalid: false
+                }
             }
         }
     },
@@ -273,6 +288,61 @@ export default {
             }).then(() => {
                 // Najverovatnije ce uvek sve biti okej
                 this.filtriraj();
+            })
+        },
+        dodajLet() {
+            this.noviLet.pocetnaDestinacija.isInvalid = false;
+            this.noviLet.krajnjaDestinacija.isInvalid = false;
+            this.noviLet.cena.isInvalid = false;
+            this.noviLet.trajanje.isInvalid = false;
+            this.noviLet.avionId.isInvalid = false;
+
+            var pocetnaDestinacija = this.noviLet.pocetnaDestinacija.value.trim();
+            var krajnjaDestinacija = this.noviLet.krajnjaDestinacija.value.trim();
+            var cena = this.noviLet.cena.value.trim();
+            var trajanje = this.noviLet.trajanje.value.trim();
+            var avionId = this.noviLet.avionId.value;
+
+            if(pocetnaDestinacija.length == 0)
+                this.noviLet.pocetnaDestinacija.isInvalid = true;
+
+            if(krajnjaDestinacija.length == 0)
+                this.noviLet.krajnjaDestinacija.isInvalid = true;
+
+            if(cena.length == 0)
+                this.noviLet.cena.isInvalid = true;
+
+            if(trajanje.length == 0)
+                this.noviLet.trajanje.isInvalid = true;
+
+            if(avionId == null)
+                this.noviLet.avionId.isInvalid = true;
+
+            
+            // Ako nesto nije u redu, ne salji zahtev
+            if(this.noviLet.pocetnaDestinacija.isInvalid ||
+                this.noviLet.krajnjaDestinacija.isInvalid ||
+                this.noviLet.cena.isInvalid ||
+                this.noviLet.trajanje.isInvalid ||
+                this.noviLet.avionId.isInvalid) {
+                    return;
+                }
+
+            api.dodajLet({
+                pocetnaDestinacija,
+                krajnjaDestinacija,
+                cena,
+                trajanje,
+                avionId
+            }).then((res) => {
+                this.filtriraj();
+                // Cistimo formu za dodavanje
+                this.noviLet.pocetnaDestinacija="";
+                this.noviLet.krajnjaDestinacija="";
+                this.noviLet.cena="";
+                this.noviLet.trajanje="";
+                this.noviLet.avionId=null;
+                this.otvorenoDodavanjeNovogLeta = false;
             })
         },
         stranaNapred() {

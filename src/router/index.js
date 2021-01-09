@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import SpisakLetova from '../views/SpisakLetova.vue'
 import AdminLetovi from '../views/admin/SpisakLetova.vue'
+import AdminAvioni from '../views/admin/SpisakAviona.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,11 @@ const routes = [
     path: '/admin/letovi',
     name: 'AdminLetovi',
     component: AdminLetovi
+  },
+  {
+    path: '/admin/avioni',
+    name: 'AdminAvioni',
+    component: AdminAvioni
   }
 ]
 
