@@ -13,11 +13,13 @@ function parseJwt(jwt){
     return JSON.parse(claims);
 }
 
-function getTipKorisnika() {
-    return "ADMIN";
+function getUserType(jwt) {
+    var claims = parseJwt(jwt);
+    return claims.role;
 }
 
 export default {
     parseJwt,
+    getUserType,
     TEMP_JWT
 }

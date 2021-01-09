@@ -343,6 +343,12 @@ export default {
                 this.noviLet.trajanje="";
                 this.noviLet.avionId=null;
                 this.otvorenoDodavanjeNovogLeta = false;
+                this.napraviToast('success', 'Uspeh', 'Uspešno dodat let')
+            }).catch((err) => {
+                var res = err.response;
+                if(res.status == 422) {
+                    this.napraviToast('danger', 'Greska', 'Podaci za novi let pravilno popunjeni')
+                }
             })
         },
         stranaNapred() {
@@ -358,7 +364,15 @@ export default {
                 this.paginacija.from=0;
             }
             this.filtriraj();
-        }
+        },
+        napraviToast(vrsta, title, poruka) {
+            this.$bvToast.toast(poruka, {
+                title: title,
+                autoHideDelay: 5000,
+                appendToast: true,
+                variant: vrsta
+            });
+        },
     }
 }
 </script>

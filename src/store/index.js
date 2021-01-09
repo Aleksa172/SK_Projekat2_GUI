@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
+import jwtUtils from '../utils'
+
 
 export default new Vuex.Store({
   state: {
@@ -17,6 +19,9 @@ export default new Vuex.Store({
   getters: {
     currentJwt(state) {
       return state.currentJwt;
+    },
+    isAdmin(state) {
+      return jwtUtils.getUserType(state.currentJwt)
     }
   },
   modules: {
