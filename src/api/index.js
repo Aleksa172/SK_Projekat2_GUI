@@ -8,8 +8,8 @@ axios.interceptors.request.use(config => {
 
 function handleRequestInterceptor(config) {
     try {
-        // var currentJwt = store.getters.currentJwt();
-        var currentJwt = sessionStorage.getItem('jwt');
+        var currentJwt = store.getters.currentJwt;
+        // test - var currentJwt = sessionStorage.getItem('jwt');
         console.log("Current JWT:", currentJwt)
         if(currentJwt) {
             config.headers['Authorization'] = currentJwt;
@@ -36,6 +36,47 @@ export default {
           password: params.password
       }
     }),
+
+    register: (params) => axios({
+        url: `${SERVIS1_URL}/register`,
+        method: 'POST',  
+        data: {
+            email: params.email,
+            password: params.password,
+            ime: params.ime,
+            prezime: params.prezime,
+            brojPasosa: params.brojPasosa
+        }
+      }),
+
+    changeUser: (params) => axios({
+        url: `${SERVIS1_URL}/changeUser`,
+        method: 'POST',  
+        data: {
+            email: params.email,
+            password: params.password,
+            ime: params.ime,
+            prezime: params.prezime,
+            brojPasosa: params.brojPasosa
+        }
+    }),
+
+    whoAmI: (params) => axios({
+        url: `${SERVIS1_URL}/whoAmI`,
+        method: 'GET'
+    }),
+
+    dodajKarticu: (params) => axios({
+        url: `${SERVIS1_URL}/addCard`,
+        method: 'POST',
+        data: {
+            ime: params.ime,
+            prezime: params.prezime,
+            brojKartice: params.brojKartice,
+            sigurnosniBroj: params.ccv
+        }
+    }),
+
 
     sviLetovi: (params) => {
         return axios({

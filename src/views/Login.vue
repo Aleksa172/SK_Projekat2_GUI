@@ -1,22 +1,22 @@
 <template>
     <b-container>
         <div>
-            <h3>Sign In</h3>
+            <h3>Prijava</h3>
 
             <div class="form-group">
-                <label>Email address</label>
+                <label>Email addresa</label>
                 <input v-model="email" type="email" class="form-control form-control-lg" />
             </div>
 
             <div class="form-group">
-                <label>Password</label>
+                <label>Lozinka</label>
                 <input v-model="password" type="password" class="form-control form-control-lg" />
             </div>
             <div class="error-msg">
                 {{ error }}
             </div>
 
-            <button @click="attemptLogin" class="btn btn-dark btn-lg btn-block">Sign In</button>
+            <button @click="attemptLogin" class="btn btn-dark btn-lg btn-block">Prijavi</button>
 
         </div>
         
@@ -46,11 +46,22 @@ export default {
             }).then((res) => {
                 var jwtToken = res.headers.authorization;
                 store.commit('SET_JWT', jwtToken)
-
+                this.napraviToast('success', 'Uspeh', 'Uspešno ste se prijavili! Bicete preuspmereni za 2 sekunde');
+                setTimeout(() => {
+                    this.$router.push('/letovi');
+                }, 2000);
             }).catch((e) => {
                 // error najverovatnije znaci da je login neuspesan
-                this.error = "Invalid credentials"
+                this.error = "Neuspešna prijava. Molimo vas proverite email i lozinku."
             })
+        },
+        napraviToast(vrsta, title, poruka) {
+            this.$bvToast.toast(poruka, {
+                title: title,
+                autoHideDelay: 5000,
+                appendToast: true,
+                variant: vrsta
+            });
         }
     },
     computed: {
