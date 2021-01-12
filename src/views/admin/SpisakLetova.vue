@@ -11,7 +11,7 @@
                         Krajnja destinacija:
                     </b-td>
                     <b-td>
-                        Trajanje
+                        Duzina
                     </b-td>
                     <b-td>
                         Cena
@@ -28,8 +28,8 @@
                         <b-form-input v-model="filteri.krajnjaDestinacija"></b-form-input>
                     </b-td>
                     <b-td>   
-                        <b-form-input v-model="filteri.trajanjeOd" placeholder="Trajanje od"></b-form-input> - 
-                        <b-form-input v-model="filteri.trajanjeDo" placeholder="Trajanje do"></b-form-input> 
+                        <b-form-input v-model="filteri.duzinaOd" placeholder="Duzina od"></b-form-input> - 
+                        <b-form-input v-model="filteri.duzinaDo" placeholder="Duzina do"></b-form-input> 
                     </b-td>
                     <b-td>   
                         <b-form-input v-model="filteri.cenaOd" placeholder="Cena od"></b-form-input> - 
@@ -67,7 +67,7 @@
                 </b-th>
             
                 <b-th>
-                    Trajanje leta (min)
+                    Duzina leta (km)
                 </b-th>
             
                 <b-th>
@@ -96,7 +96,7 @@
                     {{ red.krajnjaDestinacija }}
                 </b-td>
                 <b-td>
-                    {{ red.trajanjeLeta }}
+                    {{ red.duzinaLeta }}
                 </b-td>
                 <b-td>
                     {{ red.cena }}
@@ -134,7 +134,7 @@
                 </b-tr>
                 <b-tr>
                     <b-td>
-                        <b-form-input v-model="noviLet.trajanje.value" placeholder="Trajanje ..." :class="{'is-invalid': noviLet.trajanje.isInvalid}"></b-form-input>
+                        <b-form-input v-model="noviLet.duzina.value" placeholder="Duzina ..." :class="{'is-invalid': noviLet.duzina.isInvalid}"></b-form-input>
                     </b-td>
                     <b-td>
                         <b-form-input v-model="noviLet.cena.value" placeholder="Cena ..." :class="{'is-invalid': noviLet.cena.isInvalid}"></b-form-input>
@@ -161,6 +161,7 @@
 
 <script>
 import api from '../../api' 
+import store from '../../store'
 
 export default {
     data: function(){
@@ -171,8 +172,8 @@ export default {
             filteri: {
                 pocetnaDestinacija: "",
                 krajnjaDestinacija: "",
-                trajanjeOd: "",
-                trajanjeDo: "",
+                duzinaOd: "",
+                duzinaDo: "",
                 cenaOd: "",
                 cenaDo: "",
                 avionId: null
@@ -191,7 +192,7 @@ export default {
                     value: "",
                     isInvalid: false
                 },
-                trajanje: {
+                duzina: {
                     value: "",
                     isInvalid: false
                 },
@@ -207,6 +208,9 @@ export default {
         }
     },
     mounted() {
+        if(!store.getters.isAdmin) {
+            this.$router.push('/');
+        }
         var p = this.pripremiParametre();
         this.ucitajLetove(p);
         this.ucitajAvione();
@@ -224,7 +228,7 @@ export default {
                         avion: serverLet.avion.naziv,
                         pocetnaDestinacija: serverLet.pocetnaDestinacija,
                         krajnjaDestinacija: serverLet.krajnjaDestinacija,
-                        trajanjeLeta: serverLet.trajanjeLeta,
+                        duzinaLeta: serverLet.duzinaLeta,
                         cena: serverLet.cena,
                         status: serverLet.status
                     })
@@ -270,11 +274,11 @@ export default {
             if(this.filteri.cenaDo.trim().length>0){
                 parametri.cenaDo = this.filteri.cenaDo.trim();
             }
-            if(this.filteri.trajanjeOd.trim().length>0){
-                parametri.trajanjeOd = this.filteri.trajanjeOd.trim();
+            if(this.filteri.duzinaOd.trim().length>0){
+                parametri.duzinaOd = this.filteri.duzinaOd.trim();
             }
-            if(this.filteri.trajanjeDo.trim().length>0){
-                parametri.trajanjeDo = this.filteri.trajanjeDo.trim();
+            if(this.filteri.duzinaDo.trim().length>0){
+                parametri.duzinaDo = this.filteri.duzinaDo.trim();
             }
             if(this.filteri.avionId!=null){
                 parametri.avionId = this.filteri.avionId;
@@ -294,13 +298,13 @@ export default {
             this.noviLet.pocetnaDestinacija.isInvalid = false;
             this.noviLet.krajnjaDestinacija.isInvalid = false;
             this.noviLet.cena.isInvalid = false;
-            this.noviLet.trajanje.isInvalid = false;
+            this.noviLet.duzina.isInvalid = false;
             this.noviLet.avionId.isInvalid = false;
 
             var pocetnaDestinacija = this.noviLet.pocetnaDestinacija.value.trim();
             var krajnjaDestinacija = this.noviLet.krajnjaDestinacija.value.trim();
             var cena = this.noviLet.cena.value.trim();
-            var trajanje = this.noviLet.trajanje.value.trim();
+            var duzina = this.noviLet.duzina.value.trim();
             var avionId = this.noviLet.avionId.value;
 
             if(pocetnaDestinacija.length == 0)
@@ -312,8 +316,8 @@ export default {
             if(cena.length == 0)
                 this.noviLet.cena.isInvalid = true;
 
-            if(trajanje.length == 0)
-                this.noviLet.trajanje.isInvalid = true;
+            if(duzina.length == 0)
+                this.noviLet.duzina.isInvalid = true;
 
             if(avionId == null)
                 this.noviLet.avionId.isInvalid = true;
@@ -323,7 +327,7 @@ export default {
             if(this.noviLet.pocetnaDestinacija.isInvalid ||
                 this.noviLet.krajnjaDestinacija.isInvalid ||
                 this.noviLet.cena.isInvalid ||
-                this.noviLet.trajanje.isInvalid ||
+                this.noviLet.duzina.isInvalid ||
                 this.noviLet.avionId.isInvalid) {
                     return;
                 }
@@ -332,7 +336,7 @@ export default {
                 pocetnaDestinacija,
                 krajnjaDestinacija,
                 cena,
-                trajanje,
+                duzina,
                 avionId
             }).then((res) => {
                 this.filtriraj();
@@ -340,7 +344,7 @@ export default {
                 this.noviLet.pocetnaDestinacija="";
                 this.noviLet.krajnjaDestinacija="";
                 this.noviLet.cena="";
-                this.noviLet.trajanje="";
+                this.noviLet.duzina="";
                 this.noviLet.avionId=null;
                 this.otvorenoDodavanjeNovogLeta = false;
                 this.napraviToast('success', 'Uspeh', 'Uspešno dodat let')

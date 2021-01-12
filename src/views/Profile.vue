@@ -3,6 +3,7 @@
         <div>
             <h3>Vaši podaci</h3>
 
+            <h4>Vas rang: {{ rang }} ({{brojMilja}} mi)</h4>
             <div class="form-group">
                 <label>Email addresa</label>
                 <input v-model="email" type="email" class="form-control form-control-lg" />
@@ -45,6 +46,7 @@
                             id="input-brkar"
                             class="mb-2 mr-sm-2 mb-sm-0"
                             placeholder="4443123498761982"
+                            v-model="novaKartica.broj"
                         ></b-form-input>
 
 
@@ -53,11 +55,12 @@
                             id="input-name"
                             class="mb-2 mr-sm-2 mb-sm-0"
                             placeholder="npr. Jorgovan"
+                            v-model="novaKartica.ime"
                         ></b-form-input>
 
                         <b-input-group>
                             <label class="sr-only" for="input-prezime">Prezime (na kartici)</label>
-                            <b-form-input id="input-prezname" placeholder="npr. Slavić"></b-form-input>
+                            <b-form-input id="input-prezime" placeholder="npr. Slavić" v-model="novaKartica.prezime"></b-form-input>
                         </b-input-group>
 
                         <label class="sr-only" for="input-ccv">CCV</label>
@@ -65,6 +68,7 @@
                             id="input-ccv"
                             class="mb-2 mr-sm-2 mb-sm-0"
                             placeholder="083"
+                            v-model="novaKartica.ccv"
                         ></b-form-input>
 
 
@@ -112,20 +116,11 @@ export default {
             ime: "",
             prezime: "",
             brojPasosa: "",
+            rang: "",
+            brojMilja: "",
             error: "",
             kartice: [
-                {
-                    ime: "Pera",
-                    prezime: "Peric",
-                    brojKartice: "4438139238123",
-                    ccv: "123"
-                },
-                {
-                    ime: "Pera",
-                    prezime: "Peric",
-                    brojKartice: "4276319876312",
-                    ccv: "123"
-                }
+               
             ],
             otvorenoDodavanjeNoveKartice: false,
             novaKartica: {
@@ -138,8 +133,31 @@ export default {
     },
     mounted() {
         // Ucitaj profil sa whoAmI
+        api.whoAmI().then((res) => {
+            var serverData = res.data;
 
-        // Ucitaj kartice
+            var parts = serverData.split("/");
+            this.ime = parts[0];
+            this.prezime = parts[1];
+            this.email = parts[2];
+            this.brojPasosa = parts[3];
+            this.rang = parts[4];
+            this.brojMilja = parts[5];
+
+            // Ucitaj kartice
+            for(var i=6; i<parts.length; i++) {
+                // Pretpostavljamo da je on vlasnik svojih kartica
+                // S1 vraca samo brojeve kartica
+                this.kartice.push({
+                    ime: this.ime,
+                    prezime: this.prezime,
+                    brojKartice: parts[i],
+                    ccv: "???"
+                })
+            }
+
+        })
+        
         
     },
     methods: {

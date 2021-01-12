@@ -77,6 +77,10 @@ export default {
         }
     }),
 
+    ukloniKarticu: (params) => ({
+        // Nije jos implementirano
+    }),
+    
 
     sviLetovi: (params) => {
         return axios({
@@ -122,7 +126,7 @@ export default {
 
     dodajLet: (params) => {
         // Da bi se prosledilo springu na nacin na koji moze da dekoduje
-        var urlEnkodovanData = `pocetnaDestinacija=${params.pocetnaDestinacija}&krajnjaDestinacija=${params.krajnjaDestinacija}&cena=${params.cena}&trajanje=${params.trajanje}&avion_id=${params.avionId}`;
+        var urlEnkodovanData = `pocetnaDestinacija=${params.pocetnaDestinacija}&krajnjaDestinacija=${params.krajnjaDestinacija}&cena=${params.cena}&duzina=${params.duzina}&avion_id=${params.avionId}`;
 
 
         return axios({

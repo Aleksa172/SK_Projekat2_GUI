@@ -12,6 +12,9 @@ export default new Vuex.Store({
   mutations: {
     SET_JWT(state, jwt) {
       state.currentJwt = jwt;
+    },
+    DESTROY_JWT(state) {
+      state.currentJwt = null;
     }
   },
   actions: {
@@ -21,7 +24,10 @@ export default new Vuex.Store({
       return state.currentJwt;
     },
     isAdmin(state) {
-      return jwtUtils.getUserType(state.currentJwt)
+      if(state.currentJwt == null) {
+        return false;
+      }
+      return jwtUtils.getUserType(state.currentJwt) == "ADMIN";
     }
   },
   modules: {

@@ -68,6 +68,7 @@
 
 <script>
 import api from '../../api' 
+import store from '../../store'
 
 export default {
     data: function() {
@@ -91,6 +92,10 @@ export default {
         }
     },
     mounted() {
+        // Zastita od pristupa za ne-admina
+        if(!store.getters.isAdmin) {
+            this.$router.push('/');
+        }
         this.ucitajAvione();
     },
     methods: {

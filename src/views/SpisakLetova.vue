@@ -11,7 +11,7 @@
                         Krajnja destinacija:
                     </b-td>
                     <b-td>
-                        Trajanje
+                        Duzina
                     </b-td>
                     <b-td>
                         Cena
@@ -28,8 +28,8 @@
                         <b-form-input v-model="filteri.krajnjaDestinacija"></b-form-input>
                     </b-td>
                     <b-td>   
-                        <b-form-input v-model="filteri.trajanjeOd" placeholder="Trajanje od"></b-form-input> - 
-                        <b-form-input v-model="filteri.trajanjeDo" placeholder="Trajanje do"></b-form-input> 
+                        <b-form-input v-model="filteri.duzinaOd" placeholder="Duzina od"></b-form-input> - 
+                        <b-form-input v-model="filteri.duzinaDo" placeholder="Duzina do"></b-form-input> 
                     </b-td>
                     <b-td>   
                         <b-form-input v-model="filteri.cenaOd" placeholder="Cena od"></b-form-input> - 
@@ -72,8 +72,8 @@ export default {
             filteri: {
                 pocetnaDestinacija: "",
                 krajnjaDestinacija: "",
-                trajanjeOd: "",
-                trajanjeDo: "",
+                duzinaOd: "",
+                duzinaDo: "",
                 cenaOd: "",
                 cenaDo: "",
                 avionId: null
@@ -102,7 +102,7 @@ export default {
                         avion: serverLet.avion.naziv,
                         pocetnaDestinacija: serverLet.pocetnaDestinacija,
                         krajnjaDestinacija: serverLet.krajnjaDestinacija,
-                        trajanjeLeta: serverLet.trajanjeLeta,
+                        duzinaLeta: serverLet.duzinaLeta,
                         cena: serverLet.cena,
                         status: serverLet.status
                     })
@@ -148,11 +148,11 @@ export default {
             if(this.filteri.cenaDo.trim().length>0){
                 parametri.cenaDo = this.filteri.cenaDo.trim();
             }
-            if(this.filteri.trajanjeOd.trim().length>0){
-                parametri.trajanjeOd = this.filteri.trajanjeOd.trim();
+            if(this.filteri.duzinaOd.trim().length>0){
+                parametri.duzinaOd = this.filteri.duzinaOd.trim();
             }
-            if(this.filteri.trajanjeDo.trim().length>0){
-                parametri.trajanjeDo = this.filteri.trajanjeDo.trim();
+            if(this.filteri.duzinaDo.trim().length>0){
+                parametri.duzinaDo = this.filteri.duzinaDo.trim();
             }
             if(this.filteri.avionId!=null){
                 parametri.avionId = this.filteri.avionId;
